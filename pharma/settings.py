@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'django_extensions',
-    'products',
+    'products.apps.ProductsConfig',
     'drf_yasg',
 ]
 

@@ -6,20 +6,28 @@ class Category(models.Model):
 
     def __str__(self):
         return f'{self.name}'
+    
+    class Meta:
+        verbose_name = 'Санат'
+        verbose_name_plural = 'Санаттар'
 
 
 class Product(models.Model):
-    name = models.CharField(max_length=300)
-    price = models.PositiveIntegerField()
-    description = models.TextField()
-    manufacturer = models.TextField()
-    is_available = models.BooleanField(default=True)
-    image = models.FileField(blank=True, null=True)
+    name = models.CharField('Аты', max_length=300)
+    price = models.PositiveIntegerField('Багасы')
+    description = models.TextField('Сипаттама')
+    manufacturer = models.TextField('Өндіруші')
+    is_available = models.BooleanField('Қолжетімділігі', default=True)
+    image = models.FileField('Сурет', blank=True, null=True)
 
-    category = models.ForeignKey(Category, related_name='products', on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, related_name='products', on_delete=models.CASCADE, verbose_name='Санаты')
 
     def __str__(self):
         return f'{self.name}'
+    
+    class Meta:
+        verbose_name = 'өнім'
+        verbose_name_plural = 'өнімдер'
 
 
 class Feature(models.Model):
@@ -30,11 +38,15 @@ class Feature(models.Model):
 
 
 class Order(models.Model):
-    name = models.CharField(max_length=200)
-    address = models.CharField(max_length=400)
-    email = models.EmailField()
-    phone = models.CharField(max_length=100)
+    name = models.CharField('Аты', max_length=200)
+    address = models.CharField('Мекен жайы', max_length=400)
+    email = models.EmailField('Почта')
+    phone = models.CharField('Номер', max_length=100)
 
-    purchased_products = models.ManyToManyField(Product, related_name='orders')
+    purchased_products = models.ManyToManyField(Product, related_name='orders', verbose_name='Тауарлар')
 
-    price = models.PositiveIntegerField()
+    price = models.PositiveIntegerField('Багасы')
+
+    class Meta:
+        verbose_name = 'Тапсырыс'
+        verbose_name_plural = 'Тапсырыстар'
