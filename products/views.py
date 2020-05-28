@@ -2,6 +2,7 @@ from rest_framework import views, generics, viewsets
 from drf_yasg.utils import swagger_auto_schema
 from .serializers import CategorySerializer, ProductSerializer, OrderSerializer
 from .models import Category, Product, Feature
+from rest_framework import filters
 
 
 def get_client_ip(django_request_object):
@@ -25,6 +26,8 @@ class ProductListView(viewsets.ReadOnlyModelViewSet):
     serializer_class = ProductSerializer
     queryset = Product.objects.all()
     filterset_fields = ('category',)
+    filter_backends = [filters.SearchFilter]
+    search_fields = ('name', 'category__name')
 
 
 class OrderCreateView(generics.CreateAPIView):

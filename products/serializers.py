@@ -19,7 +19,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ('id', 'name', 'price', 'manufacturer', 'description', 'is_available', 'image', 'description', 'features')
+        fields = ('id', 'name', 'price', 'manufacturer', 'description', 'is_available', 'image', 'description', 'features', 'discount')
 
 
 class OrderSerializer(serializers.ModelSerializer):
@@ -33,7 +33,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         products = validated_data.pop('products')
-        validated_data['price'] = sum([p.price for p in products])
+        validated_data['price'] = sum([(p.price - p.discount) for p in products])
         obj = super().create(validated_data)
         for p in products:
             obj.purchased_products.add(p)

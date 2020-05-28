@@ -19,6 +19,7 @@ class Product(models.Model):
     manufacturer = models.TextField('Өндіруші')
     is_available = models.BooleanField('Қолжетімділігі', default=True)
     image = models.FileField('Сурет', blank=True, null=True)
+    discount = models.PositiveIntegerField(default=0)
 
     category = models.ForeignKey(Category, related_name='products', on_delete=models.CASCADE, verbose_name='Санаты')
 
