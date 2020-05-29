@@ -17,7 +17,7 @@ def get_client_ip(django_request_object):
     return ip
 
 
-class CategoryView(generics.ListAPIView):
+class CategoryView(viewsets.ReadOnlyModelViewSet):
     serializer_class = CategorySerializer
     queryset = Category.objects.all()
 
@@ -25,9 +25,14 @@ class CategoryView(generics.ListAPIView):
 class ProductListView(viewsets.ReadOnlyModelViewSet):
     serializer_class = ProductSerializer
     queryset = Product.objects.all()
-    filterset_fields = ('category',)
-    filter_backends = [filters.SearchFilter]
-    search_fields = ('name', 'category__name')
+
+    def get_queryset(self):
+        queryset = Product.objects.all()
+        if self.request.query_params.get('search'):
+            queryset = queryset.filter(name__istartswith=self.request.query_params.get('search').capitalize())
+        if self.request.query_params.get('category'):
+            queryset = queryset.filter(category_id=self.request.query_params.get('category'))
+        return queryset
 
 
 class OrderCreateView(generics.CreateAPIView):
